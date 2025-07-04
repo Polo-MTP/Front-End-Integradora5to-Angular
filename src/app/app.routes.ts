@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { Welcome } from './core/pages/welcome/welcome';
+import { Welcome } from './pages/welcome/welcome';
 
 export const routes: Routes = [
 
     {
-        path: 'welcome',
+        path: '',
         component: Welcome
     }
 ];
