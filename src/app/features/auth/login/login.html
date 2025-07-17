@@ -1,183 +1,93 @@
-<div
-  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 relative overflow-hidden"
->
-  <div class="absolute inset-0 overflow-hidden">
-    <div
-      class="absolute top-20 left-10 w-4 h-4 bg-white bg-opacity-20 rounded-full animate-bounce"
-    ></div>
-    <div
-      class="absolute top-40 right-20 w-6 h-6 bg-white bg-opacity-15 rounded-full animate-pulse"
-    ></div>
-    <div
-      class="absolute bottom-32 left-20 w-3 h-3 bg-white bg-opacity-25 rounded-full animate-ping"
-    ></div>
-    <div
-      class="absolute bottom-20 right-10 w-5 h-5 bg-white bg-opacity-20 rounded-full animate-bounce"
-    ></div>
+<div class="min-h-screen flex items-center justify-center bg-surface-1000 p-4 relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10">
+    <div class="absolute top-10 left-10 w-32 h-32 bg-primary-500 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-20 right-20 w-40 h-40 bg-blue-500 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+    <div class="absolute top-1/2 left-1/3 w-24 h-24 bg-cyan-500 rounded-full blur-2xl animate-pulse" style="animation-delay: 2s;"></div>
   </div>
 
-  <div
-    class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-blue-600 to-transparent opacity-20"
-  ></div>
+  
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="bubble bubble-1"></div>
+    <div class="bubble bubble-2"></div>
+    <div class="bubble bubble-3"></div>
+    <div class="bubble bubble-4"></div>
+    <div class="bubble bubble-5"></div>
+    <div class="bubble bubble-6"></div>
+    <div class="bubble bubble-7"></div>
+    <div class="bubble bubble-8"></div>
+  </div>
 
-  <div class="max-w-md w-full space-y-8 z-10">
-    <div
-      class="bg-white bg-opacity-90 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white border-opacity-30"
-    >
-      <div class="text-center mb-8">
-        <div
-          class="mx-auto w-16 h-16 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full flex items-center justify-center mb-4 shadow-lg"
-        >
-          <svg
-            class="w-8 h-8 text-white"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-            />
-          </svg>
-        </div>
-        <h2 class="text-3xl font-bold text-gray-800 mb-2">Iniciar Sesión</h2>
-        <p class="text-gray-600">Accede a tu acuario virtual</p>
+  <p-card styleClass="w-full max-w-md shadow-2xl backdrop-blur-sm border border-surface-200 dark:border-surface-700 relative z-10" 
+          header="Iniciar Sesión" 
+          subheader="Accede a tu acuario virtual">
+    
+    
+    <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 z-20">
+      <div class="bg-primary-500 w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
+        <i class="pi pi-user text-white text-2xl"></i>
       </div>
-
-      <form class="space-y-6" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="relative">
-          <p-floatlabel variant="on">
-            <input
-              id="email"
-              pInputText
-              formControlName="email"
-              autocomplete="off"
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-gray-100"
-            />
-            <label for="email" class="text-gray-600">Email</label>
-          </p-floatlabel>
-          <div
-            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400"
-          >
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-              ></path>
-            </svg>
-          </div>
-        </div>
-
-        <div class="relative">
-          <p-floatlabel variant="on">
-            <input
-              id="password"
-              pInputText
-              formControlName="password"
-              autocomplete="off"
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-gray-100"
-              type="password"
-            />
-            <label for="password" class="text-gray-600">Contraseña</label>
-          </p-floatlabel>
-          <div
-            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400"
-          >
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-              ></path>
-            </svg>
-          </div>
-        </div>
-
-        <div
-          *ngIf="error"
-          class="bg-red-50 border border-red-200 rounded-lg p-3"
-        >
-          <div class="flex items-center">
-            <svg
-              class="w-5 h-5 text-red-400 mr-2"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-            <span class="text-red-600 text-sm">{{ error }}</span>
-          </div>
-        </div>
-
-        <div>
-          <button
-            type="submit"
-            [disabled]="!loginForm.valid || loading"
-            class="w-full bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:from-blue-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-          >
-            <div class="flex items-center justify-center">
-              <svg
-                *ngIf="loading"
-                class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-                ></circle>
-                <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              <span>{{ loading ? "Iniciando..." : "Iniciar Sesión" }}</span>
-            </div>
-          </button>
-        </div>
-
-        <a
-          routerLink="/register"
-          class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 flex items-center justify-center group"
-        >
-          <span>¿No tienes cuenta? Regístrate</span>
-          <svg
-            class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-200"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </a>
-      </form>
     </div>
 
-  </div>
+    <form class="space-y-6 mt-8" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      
+      <div class="relative">
+        <p-floatlabel>
+          <input
+            id="email"
+            pInputText
+            formControlName="email"
+            class="w-full pl-10 transition-all duration-300 hover:shadow-md focus:shadow-lg"
+            autocomplete="off"
+          />
+          <label for="email">Correo electrónico</label>
+        </p-floatlabel>
+      </div>
+
+     
+      <div class="relative">
+        <p-floatlabel>
+          <input
+            id="password"
+            type="password"
+            pInputText
+            formControlName="password"
+            class="w-full pl-10 transition-all duration-300 hover:shadow-md focus:shadow-lg"
+            autocomplete="off"
+          />
+          <label for="password">Contraseña</label>
+        </p-floatlabel>
+      </div>
+
+     
+      <div *ngIf="error" class="p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg text-sm border-l-4 border-red-500 animate-slideIn">
+        <i class="pi pi-exclamation-triangle mr-2"></i>
+        {{ error }}
+      </div>
+
+      <button
+        pButton
+        type="submit"
+        [loading]="loading"
+        class="w-full relative overflow-hidden group transition-all duration-300 hover:scale-105 active:scale-95"
+        [disabled]="!loginForm.valid || loading"
+      >
+        <span class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+        <span class="relative z-10 flex items-center justify-center">
+          <i class="pi pi-sign-in mr-2" *ngIf="!loading"></i>
+          Iniciar sesión
+        </span>
+      </button>
+
+      <div class="text-center mt-6 pt-4 border-t border-surface-200 dark:border-surface-700">
+        <a
+          routerLink="/register"
+          class="inline-flex items-center text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200 hover:underline"
+        >
+          <i class="pi pi-user-plus mr-1"></i>
+          ¿No tienes cuenta? Regístrate
+        </a>
+      </div>
+    </form>
+  </p-card>
 </div>
+

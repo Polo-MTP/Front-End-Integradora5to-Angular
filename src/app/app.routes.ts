@@ -11,7 +11,8 @@ import { DashboardLayout } from './pages/layouts/dashboard-layout/dashboard-layo
 export const routes: Routes = [
     {
         path: '',
-        component: Welcome
+        component: Welcome,
+        canActivate: [GuestGuard]
     },
     {
         path: 'login',

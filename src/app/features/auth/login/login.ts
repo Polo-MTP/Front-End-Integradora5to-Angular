@@ -6,10 +6,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-login',
-  imports: [FloatLabelModule, CommonModule, ReactiveFormsModule, InputTextModule, RouterModule],
+  imports: [FloatLabelModule, CommonModule,CardModule,ButtonModule, ReactiveFormsModule, InputTextModule, RouterModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
