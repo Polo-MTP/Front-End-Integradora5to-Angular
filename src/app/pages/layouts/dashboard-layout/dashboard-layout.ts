@@ -8,10 +8,11 @@ import { AvatarModule } from "primeng/avatar";
 import { RouterOutlet } from "@angular/router";
 import { User } from "../../../core/types/auth.types";
 import { AuthService } from "../../../core/services/auth.service";
+import { TopMenu } from "../../../shared/components/top-menu/top-menu";
 
 @Component({
   selector: 'app-dashboard-layout',
-  imports: [AvatarModule,RouterOutlet, BadgeModule, RippleModule, MenuModule, CommonModule],
+  imports: [AvatarModule,RouterOutlet, BadgeModule, RippleModule, MenuModule, CommonModule, TopMenu],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.css'
 })
