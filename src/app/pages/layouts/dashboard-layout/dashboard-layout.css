@@ -1,0 +1,92 @@
+layout.component.scss
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--surface-ground);
+  border-bottom: 1px solid var(--surface-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.main-content {
+  flex: 1;
+  margin-top: 80px; /* Espacio para el header fijo */
+  overflow: hidden;
+}
+
+.content-wrapper {
+  height: 100%;
+  padding: 1.5rem;
+  overflow-y: auto;
+  background-color: var(--surface-ground);
+}
+
+/* Estilos adicionales para el contenido */
+.content-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content-wrapper::-webkit-scrollbar-track {
+  background: var(--surface-100);
+  border-radius: 4px;
+}
+
+.content-wrapper::-webkit-scrollbar-thumb {
+  background: var(--surface-300);
+  border-radius: 4px;
+}
+
+.content-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--surface-400);
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-top: 70px;
+  }
+
+  .content-wrapper {
+    padding: 1rem;
+  }
+
+  .header-content {
+    padding: 0.75rem 1rem;
+  }
+
+  .header-title {
+    font-size: 1.25rem;
+  }
+}
+
+:host ::ng-deep {
+  .p-drawer .p-drawer-mask {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .p-drawer .p-drawer-content {
+    background-color: var(--surface-ground);
+  }
+}
