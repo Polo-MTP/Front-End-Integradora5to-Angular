@@ -68,6 +68,9 @@ export class DashboardLayout {
           {
             label: 'Logout',
             icon: 'pi pi-sign-out',
+            command: () => {
+              this.logout();
+            }
           }
         ]
       },
@@ -75,5 +78,9 @@ export class DashboardLayout {
         separator: true
       }
     ]
+  }
+
+  logout() {
+    this.authService.logout().subscribe();
   }
 }

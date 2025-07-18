@@ -111,7 +111,7 @@ const MyPreset = definePreset(Aura, {
           600: '{blue.600}',
           700: '{zinc.600}', // color de las secciones
           800: '{zinc.600}', //color cuando h¿aces hover elemento y secciones
-          900: '{zinc.950}', //color de los fondos
+          900: '{zinc.900}', //color de los fondos
           950: '{zinc.900}',// color de los inputs tambien
           1000: '{zinc.500}',
         },

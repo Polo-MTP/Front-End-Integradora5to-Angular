@@ -1,66 +1,71 @@
 .bubble {
   position: absolute;
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   animation: float 15s infinite ease-in-out;
+  z-index: 1;
 }
 
 .bubble-1 {
   width: 80px;
   height: 80px;
-  left: 10%;
   top: 20%;
+  left: 10%;
   animation-delay: 0s;
 }
 
 .bubble-2 {
   width: 60px;
   height: 60px;
-  left: 85%;
-  top: 15%;
-  animation-delay: 5s;
+  top: 60%;
+  left: 80%;
+  animation-delay: 2s;
 }
 
 .bubble-3 {
-  width: 40px;
-  height: 40px;
+  width: 100px;
+  height: 100px;
+  top: 40%;
   left: 70%;
-  top: 75%;
-  animation-delay: 10s;
+  animation-delay: 4s;
 }
 
 .bubble-4 {
-  width: 50px;
-  height: 50px;
-  left: 20%;
+  width: 40px;
+  height: 40px;
   top: 80%;
-  animation-delay: 7s;
+  left: 30%;
+  animation-delay: 6s;
 }
 
 .bubble-5 {
-  width: 30px;
-  height: 30px;
-  left: 45%;
-  top: 95%;
-  animation-delay: 12s;
+  width: 120px;
+  height: 120px;
+  top: 10%;
+  left: 60%;
+  animation-delay: 8s;
 }
 
 .bubble-6 {
   width: 70px;
   height: 70px;
-  left: 90%;
-  top: 60%;
-  animation-delay: 3s;
+  top: 70%;
+  left: 50%;
+  animation-delay: 10s;
 }
 
 @keyframes float {
   0%, 100% {
-    transform: translateY(0px) scale(1);
-    opacity: 0.1;
-  }
-  50% {
-    transform: translateY(-120px) scale(1.1);
+    transform: translateY(0px) translateX(0px);
     opacity: 0.3;
+  }
+  33% {
+    transform: translateY(-30px) translateX(20px);
+    opacity: 0.6;
+  }
+  66% {
+    transform: translateY(-15px) translateX(-15px);
+    opacity: 0.4;
   }
 }
 
@@ -79,90 +84,65 @@
   animation: slideIn 0.3s ease-out;
 }
 
-@media (prefers-color-scheme: dark) {
-  .bubble {
-    background: rgba(99, 179, 237, 0.08);
-  }
+:host ::ng-deep .p-stepper {
+  background: transparent;
 }
 
-.p-inputtext:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+:host ::ng-deep .p-stepper .p-stepper-header {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
 }
 
-.p-inputtext:focus {
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+:host ::ng-deep .p-stepper .p-stepper-content {
+  padding: 0;
 }
 
+:host ::ng-deep .p-step-list {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
 
-.p-card .p-card-header {
-  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
-  color: white;
-  border-radius: 12px 12px 0 0;
-  padding: 1.5rem;
+:host ::ng-deep .p-step {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  min-width: 200px;
   text-align: center;
-  position: relative;
-  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.p-card .p-card-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="waves" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M0,10 Q5,5 10,10 T20,10" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/></pattern></defs><rect width="100" height="100" fill="url(%23waves)"/></svg>');
-  opacity: 0.3;
+:host ::ng-deep .p-step:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
 }
 
-.p-card .p-card-header .p-card-title,
-.p-card .p-card-header .p-card-subtitle {
-  position: relative;
-  z-index: 1;
+:host ::ng-deep .p-step.p-step-active {
+  background: rgba(var(--primary-500), 0.2);
+  border: 2px solid var(--primary-500);
 }
 
-.p-button {
-  position: relative;
-  overflow: hidden;
-}
-
-.p-button::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s;
-}
-
-.p-button:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-.p-card {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.file-upload-custom label {
-  transition: color 0.3s ease;
-}
-
-.file-upload-custom:hover label {
+:host ::ng-deep .p-step.p-step-active span {
   color: var(--primary-500);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  :host ::ng-deep .p-step-list {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  :host ::ng-deep .p-step {
+    min-width: auto;
+  }
+  
+  .bubble {
+    display: none;
+  }
 }

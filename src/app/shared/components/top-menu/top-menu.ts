@@ -50,9 +50,17 @@ export class TopMenu implements OnInit {
   }
 
   toggleDarkMode() {
-    const element = document.querySelector('html');
-    if (element) {
-      element.classList.toggle('my-app-dark');
-    }
+  const className = 'my-app-dark';
+  const element = document.documentElement;
+  const hasDark = element.classList.contains(className);
+
+  if (hasDark) {
+    element.classList.remove(className);
+    localStorage.setItem('theme', 'light');
+  } else {
+    element.classList.add(className);
+    localStorage.setItem('theme', 'dark');
+  }
 }
+
 }
