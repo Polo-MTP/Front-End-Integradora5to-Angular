@@ -54,7 +54,6 @@ export class AuthService {
       .pipe(
         tap((response) => {
           this.handleAuthResponse(response);
-          this.redirectAfterAuth();
         }),
         catchError(this.handleError.bind(this))
       );

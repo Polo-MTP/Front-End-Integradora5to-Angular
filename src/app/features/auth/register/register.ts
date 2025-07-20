@@ -10,36 +10,54 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { StepperModule } from 'primeng/stepper';
+import { TankService } from '../../../core/services/tank.service';
+import { BadgeModule } from 'primeng/badge';
+import { ChipModule } from 'primeng/chip';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
+import {
+  SensorType,
+  SelectedSensor,
+  getDevicesResponse,
+} from '../../../core/types/tank.types';
 @Component({
   selector: 'app-register',
   imports: [
-    FloatLabelModule, 
+    FloatLabelModule,
     CommonModule,
-    CardModule, 
-    ButtonModule, 
-    ReactiveFormsModule, 
-    InputTextModule, 
-    RouterModule, 
+    CardModule,
+    ButtonModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    RouterModule,
     FileUploadModule,
     StepperModule,
+    BadgeModule,
+    ChipModule,
+    ProgressSpinnerModule,
   ],
   templateUrl: './register.html',
-  styleUrl: './register.css'
+  styleUrl: './register.css',
 })
 export class Register {
   loginForm: FormGroup;
   aquariumForm: FormGroup;
   loading = false;
-  canAccessNextSteps = false; 
+  canAccessNextSteps = false;
   error: string = '';
   profileImage: File | null = null;
   currentStep = 1;
   userRegistered = false;
+  sensorTypes: SensorType[] = [];
+  selectedSensorTypes: SelectedSensor[] = [];
+  loadingSensorTypes = false;
+  sensorTypesError: string = '';
+  readonly MAX_SENSORS = 6;
 
   constructor(
     private form: FormBuilder,
     private authService: AuthService,
+    private tankService: TankService,
     private router: Router
   ) {
     this.loginForm = this.form.group({
@@ -49,12 +67,18 @@ export class Register {
     });
 
     this.aquariumForm = this.form.group({
-      aquariumName: [''],
-      aquariumSize: [''],
-      aquariumType: [''],
-      fishCount: [''],
-      description: ['']
+      aquariumName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(15),
+        ],
+      ],
+      description: ['', [Validators.required, Validators.minLength(5)]],
     });
+
+    this.loadSensorTypes();
   }
 
   onFileSelect(event: any) {
@@ -62,6 +86,89 @@ export class Register {
     if (file) {
       this.profileImage = file;
     }
+  }
+
+  loadSensorTypes() {
+    this.loadingSensorTypes = true;
+    this.sensorTypesError = '';
+
+    this.tankService.getDevices().subscribe({
+      next: (response: getDevicesResponse) => {
+        this.sensorTypes = response.data;
+        this.loadingSensorTypes = false;
+      },
+      error: (error) => {
+        this.sensorTypesError = 'Error loading sensor types';
+        this.loadingSensorTypes = false;
+      },
+    });
+  }
+
+  addSensor(sensorTypeId: number) {
+    if (this.getTotalSensors() >= this.MAX_SENSORS) {
+      return;
+    }
+
+    const existingSensor = this.selectedSensorTypes.find(
+      (sensor) => sensor.sensor_type_id === sensorTypeId
+    );
+    const sensorType = this.sensorTypes.find(
+      (sensor) => sensor.id === sensorTypeId
+    );
+
+    if (!sensorType) return;
+
+    if (existingSensor) {
+      existingSensor.quantity++;
+    } else {
+      this.selectedSensorTypes.push({
+        sensor_type_id: sensorTypeId,
+        quantity: 1,
+        sensorType: sensorType,
+      });
+    }
+  }
+
+  getTotalSensors(): number {
+    return this.selectedSensorTypes.reduce(
+      (total, sensor) => total + sensor.quantity,
+      0
+    );
+  }
+
+  removeSensor(sensorTypeId: number) {
+    const existingSensor = this.selectedSensorTypes.find(
+      (sensor) => sensor.sensor_type_id === sensorTypeId
+    );
+
+    if (existingSensor) {
+      if (existingSensor.quantity > 1) {
+        existingSensor.quantity--;
+      } else {
+        this.selectedSensorTypes = this.selectedSensorTypes.filter(
+          (sensor) => sensor.sensor_type_id !== sensorTypeId
+        );
+      }
+    }
+  }
+
+  getSensorType(sensorTypeId: number) {
+    return this.sensorTypes.find((sensor) => sensor.id === sensorTypeId);
+  }
+
+  getSensorQuantity(sensorTypeId: number): number {
+    const sensor = this.selectedSensorTypes.find(
+      (s) => s.sensor_type_id === sensorTypeId
+    );
+    return sensor ? sensor.quantity : 0;
+  }
+
+  canAddMoreSensors(): boolean {
+    return this.getTotalSensors() < this.MAX_SENSORS;
+  }
+
+  hasSensorsSelected(): boolean {
+    return this.selectedSensorTypes.length > 0;
   }
 
   onSubmitUser() {
@@ -88,20 +195,37 @@ export class Register {
         error: (error) => {
           this.loading = false;
           this.error = error.message;
-        }
+        },
       });
     }
   }
 
   onSubmitAquarium() {
-    if (this.aquariumForm.valid) {
+    if (this.aquariumForm.valid && this.hasSensorsSelected()) {
       this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        this.router.navigate(['/dashboard']);
-      }, 1000);
+
+      const aquariumData = {
+        name: this.aquariumForm.value.aquariumName,
+        description: this.aquariumForm.value.description,
+        devices: this.selectedSensorTypes.map((sensor) => ({
+          sensor_type_id: sensor.sensor_type_id,
+          quantity: sensor.quantity,
+        })),
+      };
+
+      this.tankService.registerTank(aquariumData).subscribe({
+        next: () => {
+          this.loading = false;
+          this.router.navigate(['/dashboard']);
+        },
+        error: (error) => {
+          this.loading = false;
+          this.error = error.message;
+        },
+      });
     }
   }
+
 
   skipAquarium() {
     this.router.navigate(['/dashboard']);

@@ -4,7 +4,7 @@ import { BehaviorSubject, catchError, map, Observable, of, tap, throwError, } fr
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
-import { registerTankData, registerTankResponse } from '../types/tank.types';
+import { registerTankData, registerTankResponse, DeviceData, getDevicesResponse, SensorType } from '../types/tank.types';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +20,11 @@ export class TankService {
 
   registerTank(data: registerTankData): Observable<registerTankResponse> {
     return this.http
-      .post<registerTankResponse>(`${this.apiUrl}/tank`, data)
+      .post<registerTankResponse>(`${this.apiUrl}/tanks`, data)
   }
 
-  
+  getDevices(): Observable<getDevicesResponse> {
+    return this.http
+      .get<getDevicesResponse>(`${this.apiUrl}/sensor-types`)
+  }
 }

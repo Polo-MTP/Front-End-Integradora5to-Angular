@@ -1,6 +1,12 @@
 export interface registerTankData {
-    name: string;
-    description: string;
+  name: string
+  description: string
+  devices: DeviceData[]
+}
+
+export interface DeviceData {
+  sensor_type_id: number
+  quantity: number
 }
 
 export interface registerTankResponse {
@@ -18,3 +24,24 @@ export interface Tank {
   updatedAt: string
   id: number
 }
+
+export interface getDevicesResponse {
+  message: string
+  data: SensorType[]
+}
+
+export interface SensorType {
+  id: number
+  name: string
+  code: string
+  isActive: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface SelectedSensor {
+  sensor_type_id: number;
+  quantity: number;
+  sensorType: SensorType; 
+}
+

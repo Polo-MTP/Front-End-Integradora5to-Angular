@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -10,4 +11,13 @@ import { ButtonModule } from 'primeng/button';
 })
 export class Welcome {
 
+  constructor(private router: Router) { }
+
+  goToRegister() {
+    this.router.navigate(['/register']);
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
 }
