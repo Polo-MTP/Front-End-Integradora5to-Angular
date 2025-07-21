@@ -16,10 +16,10 @@ import {
   User,
   LoginData,
   LoginResponse,
-  RegisterData,
   RegisterResponse,
   ApiErrorResponse,
-  ValidationError,
+  UpdateUserResponse,
+  UpdateUserData,
 } from '../types/auth.types';
 import { environment } from '../../../environments/environment';
 
@@ -69,6 +69,38 @@ export class AuthService {
         }),
         catchError(this.handleError.bind(this))
       );
+  }
+
+  updateUser(userData: UpdateUserData): Observable<UpdateUserResponse> {
+    return this.http
+      .patch<UpdateUserResponse>(`${this.apiUrl}/auth/user`, userData)
+      .pipe(
+        tap({
+          next: (response) => {
+            this.updateUserInfo(response.user);
+          },
+          error: (error) => {
+            return throwError(error);
+          },
+        })
+      );
+  }
+
+  updateProfileImage(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('profileImage', file, file.name);
+
+    return this.http
+      .put<any>(`${this.apiUrl}/auth/profile-image`, formData)
+        .pipe(
+          tap((response: any) => {
+            const currentUser = this.currentUserSubject.value;
+            if (currentUser && response.user) {
+              const updatedUser = { ...currentUser, profileImage: response.user.profileImage };
+              this.currentUserSubject.next(updatedUser);
+            }
+          }
+        ))
   }
 
   logout(): Observable<any> {
@@ -148,7 +180,7 @@ export class AuthService {
         this.router.navigate(['/admin-dashboard']);
         break;
       case 'cliente':
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/dash/home']);
         break;
       default:
         this.router.navigate(['/']);

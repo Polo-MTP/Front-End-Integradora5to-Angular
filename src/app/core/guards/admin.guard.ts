@@ -17,7 +17,7 @@ export const AdminGuard: CanActivateFn = (route, state) => {
 
   const user = authService.getCurrentUser();
   if (user?.rol === 'cliente') {
-    router.navigate(['/dashboard']);
+    router.navigate(['/dash/home']);
   } else {
     router.navigate(['/']);
   }

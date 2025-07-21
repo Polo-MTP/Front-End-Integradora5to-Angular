@@ -216,7 +216,7 @@ export class Register {
       this.tankService.registerTank(aquariumData).subscribe({
         next: () => {
           this.loading = false;
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/dash/home']);
         },
         error: (error) => {
           this.loading = false;
@@ -228,7 +228,7 @@ export class Register {
 
 
   skipAquarium() {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/dash/home']);
   }
 
   goToStep(step: number) {

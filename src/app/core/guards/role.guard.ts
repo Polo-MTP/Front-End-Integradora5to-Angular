@@ -27,7 +27,7 @@ export const RoleGuard = (allowedRoles: string[]): CanActivateFn => {
         router.navigate(['/admin-dashboard']);
         break;
       case 'cliente':
-        router.navigate(['/dashboard']);
+        router.navigate(['/dash/home']);
         break;
       default:
         router.navigate(['/']);

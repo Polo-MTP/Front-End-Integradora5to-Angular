@@ -1,0 +1,116 @@
+<div class="w-full p-4">
+  <p-toast></p-toast>
+  <p-card
+    styleClass="w-full shadow-2xl  border border-surface-200 dark:border-surface-700 relative z-10"
+  >
+    <ng-template #header>
+      <div class="flex flex-col justify-start p-2">
+        <h2 class="text-xl font-semibold">Account</h2>
+        <p class="text-sm text-muted-color">
+          Real-time nformation and activities of your account
+        </p>
+      </div>
+    </ng-template>
+
+    <p-divider />
+
+    <div class="flex flex-row p-2 gap-6">
+      <p-avatar image="{{user?.profileImage}}" size="xlarge" shape="circle">
+      </p-avatar>
+      <input
+        type="file"
+        #fileInput
+        accept="image/*"
+        (change)="onFileSelect($event)"
+        style="display: none"
+      />
+      <button
+        pButton
+        type="button"
+        [label]="uploading ? 'Uploading...' : 'Change Profile Image'"
+        icon="pi pi-upload"
+        class="p-button-sm p-button-text mt-4"
+        size="small"
+        [disabled]="uploading"
+        (click)="fileInput.click()">
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="flex flex-col md:flex-row gap-6 mt-6">
+        <div class="relative w-full">
+          <p-floatlabel>
+            <input
+              id="fullName"
+              pInputText
+              formControlName="fullName"
+              class="w-full pl-10 transition-all duration-300 hover:shadow-md focus:shadow-lg"
+              autocomplete="off"
+              placeholder="Nombre Completo"
+            />
+            <label for="fullName">Nombre Completo</label>
+          </p-floatlabel>
+          <small
+            class="text-red-600"
+            *ngIf="form.get('fullName')?.touched && form.get('fullName')?.invalid"
+          >
+            <span *ngIf="form.get('fullName')?.errors?.['required']"
+              >El nombre es obligatorio.</span
+            >
+            <span *ngIf="form.get('fullName')?.errors?.['minlength']"
+              >Mínimo 3 caracteres.</span
+            >
+          </small>
+        </div>
+
+        <div class="relative w-full">
+          <p-floatlabel>
+            <input
+              id="email"
+              pInputText
+              formControlName="email"
+              class="w-full pl-10 transition-all duration-300 hover:shadow-md focus:shadow-lg"
+              autocomplete="off"
+              placeholder="Correo Electrónico"
+            />
+            <label for="email">Correo Electrónico</label>
+          </p-floatlabel>
+          <small
+            class="text-red-600"
+            *ngIf="form.get('email')?.touched && form.get('email')?.invalid"
+          >
+            <span *ngIf="form.get('email')?.errors?.['required']"
+              >El correo es obligatorio.</span
+            >
+            <span *ngIf="form.get('email')?.errors?.['email']"
+              >Correo no válido.</span
+            >
+          </small>
+        </div>
+      </div>
+
+      <div
+        *ngIf="error"
+        class="mt-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg text-sm border-l-4 border-red-500"
+      >
+        {{ error }}
+      </div>
+
+      <button
+        pButton
+        type="submit"
+        label="Actualizar Perfil"
+        icon="pi pi-check"
+        iconPos="right"
+        class="w-full mt-6"
+        [disabled]="form.invalid"
+      ></button>
+    </form>
+
+    <div class="flex flex-col justify-start p-2">
+      <h3 class="text-xl">Account Security</h3>
+    </div>
+
+    <p-divider />
+  </p-card>
+</div>

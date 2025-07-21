@@ -7,11 +7,14 @@ import { AdminGuard } from './core/guards/admin.guard';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { DashboardLayout } from './pages/layouts/dashboard-layout/dashboard-layout';
+import { Account } from './features/dashboard/account/account';
+import { Home } from './features/dashboard/home/home';
 
 export const routes: Routes = [
     {
         path: '',
         component: Welcome,
+        pathMatch: 'full',
         canActivate: [GuestGuard]
     },
     {
@@ -25,13 +28,17 @@ export const routes: Routes = [
         canActivate: [GuestGuard]
     },
     {
-        path: 'dashboard',
+        path: 'dash',
         component: DashboardLayout,
         children:[
             {
-                path: 'prueba',
-                component: Login
+                path: 'home',
+                component: Home
             },
+            {
+                path: 'account',
+                component: Account
+            }
         ],
         canActivate: [AuthGuard, ClientGuard],
     },

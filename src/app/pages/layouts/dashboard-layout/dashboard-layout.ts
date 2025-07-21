@@ -9,6 +9,7 @@ import { RouterOutlet } from "@angular/router";
 import { User } from "../../../core/types/auth.types";
 import { AuthService } from "../../../core/services/auth.service";
 import { TopMenu } from "../../../shared/components/top-menu/top-menu";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -20,13 +21,12 @@ export class DashboardLayout {
   user: User | null = null;
   items: MenuItem[] | undefined;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
 
   ngOnInit(): void {
     this.authService.currentUser$.subscribe(user => {
       this.user = user;
-      console.log(user);
     });
     
     this.items = [
@@ -39,6 +39,9 @@ export class DashboardLayout {
           {
             label: 'Inicio',
             icon: 'pi pi-home',
+            command: () => {
+              this.goToPage('/dash/home');
+            }
           },
           {
             label: 'search',
@@ -64,6 +67,9 @@ export class DashboardLayout {
           {
             label: 'Profile',
             icon: 'pi pi-user',
+            command: () => {
+              this.goToPage('/dash/account');
+            }
           },
           {
             label: 'Logout',
@@ -78,6 +84,10 @@ export class DashboardLayout {
         separator: true
       }
     ]
+  }
+
+  goToPage(url: string) {
+    this.router.navigate([url]);
   }
 
   logout() {
