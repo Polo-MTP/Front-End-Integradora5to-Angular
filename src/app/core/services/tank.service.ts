@@ -1,30 +1,41 @@
 
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, of, tap, throwError, } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { registerTankData, registerTankResponse, DeviceData, getDevicesResponse, SensorType } from '../types/tank.types';
+import { environment } from '../../../environments/environment';
+import {
+  RegisterTankData,
+  RegisterTankResponse,
+  getDevicesResponse,
+  ResponseTanksList,
+  ResponseTankById
+} from '../types/tank.types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TankService {
-  private apiUrl = environment.apiUrl;
+  private readonly apiUrl = environment.apiUrl;
 
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
-
-  constructor(private http: HttpClient, private router: Router) { }
-
-
-
-  registerTank(data: registerTankData): Observable<registerTankResponse> {
-    return this.http
-      .post<registerTankResponse>(`${this.apiUrl}/tanks`, data)
+  registerTank(data: RegisterTankData): Observable<RegisterTankResponse> {
+    return this.http.post<RegisterTankResponse>(`${this.apiUrl}/tanks`, data);
   }
 
   getDevices(): Observable<getDevicesResponse> {
-    return this.http
-      .get<getDevicesResponse>(`${this.apiUrl}/sensor-types`)
+    return this.http.get<getDevicesResponse>(`${this.apiUrl}/sensor-types`);
+  }
+
+  getTanksList(): Observable<ResponseTanksList> {
+    return this.http.get<ResponseTanksList>(`${this.apiUrl}/tanks`);
+  }
+
+  getTankById(id: number): Observable<ResponseTankById> {
+    return this.http.get<ResponseTankById>(`${this.apiUrl}/tanks/${id}/data`);
   }
 }

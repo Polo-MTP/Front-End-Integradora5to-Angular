@@ -1,1 +1,111 @@
-<p>home works!</p>
+<div class="p-4">   
+  <!-- Header con selector -->   
+  <div class="mb-4">     
+    <p-card styleClass="border-none shadow-1">       
+      <div class="flex align-items-center gap-3">         
+        <div class="flex-1">           
+          <h1 class="text-2xl font-bold m-0 mb-1">Dashboard de Sensores</h1>           
+          <p class="text-color-secondary m-0">Monitorea tu pecera en tiempo real</p>         
+        </div>         
+        <div class="flex flex-column gap-2 px-2">           
+          <div class="flex align-items-center justify-content-between p-3">               
+            <div class="flex align-items-center gap-3">                 
+              <div class="w-3rem h-3rem border-circle bg-blue-100 flex align-items-center justify-content-center">                   
+                <i class="pi pi-desktop text-blue-600 text-xl"></i>                 
+              </div>                 
+              <div>                   
+                <h2 class="text-xl font-semibold m-0">{{ selectedTank?.name }}</h2>                   
+                <p class="text-color-secondary text-sm m-0" *ngIf="selectedTank?.description">                     
+                  {{ selectedTank?.description }}                   
+                </p>                 
+              </div>               
+            </div>           
+            <select             
+              id="tank-selector"             
+              class="p-inputtext p-component"             
+              [(ngModel)]="selectedTankId"             
+              (ngModelChange)="onTankChange($event)"             
+              [disabled]="loading || !hasTanks"             
+              style="min-width: 200px;">             
+              <option value="" disabled>Selecciona una pecera</option>             
+              <option *ngFor="let tank of tanks; trackBy: trackByTankId" [value]="tank.id">               
+                {{ tank.name }}             
+              </option>           
+            </select>         
+          </div>            
+        </div>       
+      </div>     
+    </p-card>   
+  </div>    
+
+  <!-- Loading State -->   
+  <div *ngIf="loading" class="flex justify-content-center align-items-center py-8">     
+    <p-progressSpinner styleClass="w-3rem h-3rem"></p-progressSpinner>   
+  </div>    
+
+  <!-- No tanks available -->   
+  <div *ngIf="!loading && !hasTanks">     
+    <p-card styleClass="text-center py-6">       
+      <i class="pi pi-inbox text-6xl text-400 mb-3"></i>       
+      <h3 class="text-xl font-medium mb-2">No hay peceras disponibles</h3>       
+      <p class="text-color-secondary">Agrega una pecera para comenzar a monitorear sensores.</p>     
+    </p-card>   
+  </div>    
+
+  <!-- Tank selected but no sensors -->   
+  <div *ngIf="!loading && hasSelectedTank && sensors.length === 0">     
+    <p-card styleClass="text-center py-6">       
+      <i class="pi pi-desktop text-6xl text-400 mb-3"></i>       
+      <h3 class="text-xl font-medium mb-2">No hay sensores configurados</h3>       
+      <p class="text-color-secondary">Esta pecera no tiene sensores asignados.</p>     
+    </p-card>   
+  </div>    
+
+  <!-- Dashboard with sensors -->   
+  <div *ngIf="!loading && hasSelectedTank && sensors.length > 0">          
+    <!-- Tank Info Card -->      
+    <!-- Sensors Grid - SIN ESPACIOS FANTASMA -->     
+    <div class="flex flex-wrap gap-3">       
+      <div *ngFor="let sensor of sensors; trackBy: trackBySensorId"             
+           class="flex-1 min-w-full sm:min-w-0 sm:flex-none sensor-card-animate"            
+           [style.flex-basis]="getFlexBasis()">         
+        <app-sensor-card            
+          [sensor]="sensor"           
+          class="block w-full h-full">         
+        </app-sensor-card>       
+      </div>     
+    </div>    
+  </div>    
+
+  <!-- No tank selected -->   
+  <div *ngIf="!loading && hasTanks && !hasSelectedTank">     
+    <p-card styleClass="text-center py-6">       
+      <i class="pi pi-arrow-up text-6xl text-400 mb-3"></i>       
+      <h3 class="text-xl font-medium mb-2">Selecciona una pecera</h3>       
+      <p class="text-color-secondary">Elige una pecera del menú desplegable para ver sus sensores.</p>     
+    </p-card>   
+  </div>  
+</div>
+
+<!-- Estilos CSS para animaciones solamente -->
+<style>
+.sensor-card-animate {
+  animation: fadeInUp 0.4s ease-out;
+  transition: transform 0.2s ease;
+}
+
+.sensor-card-animate:hover {
+  transform: translateY(-2px);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

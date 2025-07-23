@@ -1,0 +1,182 @@
+<ng-container [ngSwitch]="Type">
+  <!-- Sensor de Temperatura -->
+  <p-card *ngSwitchCase="'tmp'" class="h-full overflow-hidden">
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center justify-content-between p-4 bg-gradient-to-r from-orange-50 to-red-50 border-bottom-1 surface-border">
+        <div class="flex align-items-center gap-3">
+          <div class="w-3rem h-3rem border-circle bg-orange-100 flex align-items-center justify-content-center">
+            <i class="pi pi-sun text-orange-600 text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold m-0 text-orange-800">{{ Name }}</h3>
+            <p class="text-xs text-orange-600 m-0">Temperatura</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-2xl font-bold text-orange-700">{{ Value }}°C</div>
+          <div class="text-xs text-orange-500" [ngClass]="{
+            'text-green-600': Value >= 24 && Value <= 26,
+            'text-yellow-600': (Value >= 22 && Value < 24) || (Value > 26 && Value <= 28),
+            'text-red-600': Value < 22 || Value > 28
+          }">
+            {{ getTemperatureStatus(Value) }}
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    
+    <div class="p-4">
+      <div class="mb-3">
+        <div class="flex justify-content-between align-items-center mb-2">
+          <span class="text-sm text-600">Rango Óptimo: 24-26°C</span>
+          <span class="text-sm font-semibold" [ngClass]="{
+            'text-green-600': Value >= 24 && Value <= 26,
+            'text-yellow-600': (Value >= 22 && Value < 24) || (Value > 26 && Value <= 28),
+            'text-red-600': Value < 22 || Value > 28
+          }">{{ Value }}%</span>
+        </div>
+        <p-progressBar 
+          [value]="getTemperaturePercentage(Value)" 
+          class="w-full" 
+          [styleClass]="'h-3 ' + getTemperatureBarClass(Value)">
+        </p-progressBar>
+      </div>
+      <div class="flex justify-content-between text-xs text-500">
+        <span>20°C</span>
+        <span>30°C</span>
+      </div>
+    </div>
+  </p-card>
+
+  <!-- Sensor de Humedad -->
+  <p-card *ngSwitchCase="'hmd'" class="h-full overflow-hidden">
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center justify-content-between p-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-bottom-1 surface-border">
+        <div class="flex align-items-center gap-3">
+          <div class="w-3rem h-3rem border-circle bg-blue-100 flex align-items-center justify-content-center">
+            <i class="pi pi-cloud text-blue-600 text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold m-0 text-blue-800">{{ Name }}</h3>
+            <p class="text-xs text-blue-600 m-0">Humedad</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-2xl font-bold text-blue-700">{{ Value }}%</div>
+          <div class="text-xs text-blue-500" [ngClass]="{
+            'text-green-600': Value >= 60 && Value <= 70,
+            'text-yellow-600': (Value >= 50 && Value < 60) || (Value > 70 && Value <= 80),
+            'text-red-600': Value < 50 || Value > 80
+          }">
+            {{ getHumidityStatus(Value) }}
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    
+    <div class="p-4">
+      <div class="mb-3">
+        <div class="flex justify-content-between align-items-center mb-2">
+          <span class="text-sm text-600">Rango Óptimo: 60-70%</span>
+          <span class="text-sm font-semibold" [ngClass]="{
+            'text-green-600': Value >= 60 && Value <= 70,
+            'text-yellow-600': (Value >= 50 && Value < 60) || (Value > 70 && Value <= 80),
+            'text-red-600': Value < 50 || Value > 80
+          }">{{ Value }}%</span>
+        </div>
+        <p-progressBar 
+          [value]="Value" 
+          class="w-full" 
+          [styleClass]="'h-3 ' + getHumidityBarClass(Value)">
+        </p-progressBar>
+      </div>
+      <div class="flex justify-content-between text-xs text-500">
+        <span>0%</span>
+        <span>100%</span>
+      </div>
+    </div>
+  </p-card>
+
+  <!-- Sensor de pH -->
+  <p-card *ngSwitchCase="'ph'" class="h-full overflow-hidden">
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center justify-content-between p-4 bg-gradient-to-r from-purple-50 to-pink-50 border-bottom-1 surface-border">
+        <div class="flex align-items-center gap-3">
+          <div class="w-3rem h-3rem border-circle bg-purple-100 flex align-items-center justify-content-center">
+            <i class="pi pi-flask text-purple-600 text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold m-0 text-purple-800">{{ Name }}</h3>
+            <p class="text-xs text-purple-600 m-0">Nivel pH</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-2xl font-bold" [ngClass]="{
+            'text-green-600': Value >= 6.5 && Value <= 7.5,
+            'text-red-600': Value < 6.5,
+            'text-purple-600': Value > 7.5
+          }">{{ Value }}</div>
+          <div class="text-xs" [ngClass]="{
+            'text-green-600': Value >= 6.5 && Value <= 7.5,
+            'text-red-600': Value < 6.5,
+            'text-purple-600': Value > 7.5
+          }">
+            {{ getPHStatus(Value) }}
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    
+    <div class="p-4">
+      <div class="mb-3">
+        <div class="flex justify-content-between align-items-center mb-2">
+          <span class="text-sm text-600">Rango Óptimo: 6.5-7.5</span>
+          <span class="text-sm font-semibold" [ngClass]="{
+            'text-green-600': Value >= 6.5 && Value <= 7.5,
+            'text-red-600': Value < 6.5,
+            'text-purple-600': Value > 7.5
+          }">{{ Value }}</span>
+        </div>
+        <div class="relative w-full h-3 border-round overflow-hidden mb-2" 
+             style="background: linear-gradient(to right, #ef4444 0%, #f97316 20%, #eab308 40%, #22c55e 50%, #3b82f6 70%, #8b5cf6 100%);">
+          <div class="absolute w-1 h-full bg-white border-1 border-gray-800 shadow-2" 
+               [style.left.%]="getPHPosition(Value)">
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-content-between text-xs text-500">
+        <span>Ácido (0)</span>
+        <span>Neutro (7)</span>
+        <span>Básico (14)</span>
+      </div>
+    </div>
+  </p-card>
+
+  <!-- Sensor por defecto -->
+  <p-card *ngSwitchDefault class="h-full overflow-hidden">
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center justify-content-between p-4 bg-gradient-to-r from-gray-50 to-blue-gray-50 border-bottom-1 surface-border">
+        <div class="flex align-items-center gap-3">
+          <div class="w-3rem h-3rem border-circle bg-gray-100 flex align-items-center justify-content-center">
+            <i class="pi pi-cog text-gray-600 text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold m-0 text-gray-800">{{ Name }}</h3>
+            <p class="text-xs text-gray-600 m-0">Sensor Genérico</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-2xl font-bold text-gray-700">{{ Value }}</div>
+          <div class="text-xs text-gray-500">Valor Actual</div>
+        </div>
+      </div>
+    </ng-template>
+    
+    <div class="p-4">
+      <div class="text-center text-gray-600">
+        <i class="pi pi-info-circle text-2xl mb-2"></i>
+        <p class="text-sm m-0">Sensor en funcionamiento</p>
+      </div>
+    </div>
+  </p-card>
+</ng-container>
