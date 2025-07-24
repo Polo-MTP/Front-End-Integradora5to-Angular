@@ -1,0 +1,79 @@
+<div class="p-4">
+  <div class="mb-4">
+    <p-card styleClass="flex flex-col shadow-1">
+      <div class="flex items-start gap-2 justify-between">
+        <div>
+          <div class="text-2xl leading-8 font-medium">Customers</div>
+          <div class="mt-1 leading-6 text-muted-color">
+            The analytics dashboard for your customers
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 mb-4 flex items-center justify-between">
+        <h1>hola</h1>
+      </div>
+      <div class="flex-1 rounded-lg border border-surface w-full overflow-auto">
+        <p-table
+          [value]="users"
+          [lazy]="true"
+          (onLazyLoad)="loadUsers($event)"
+          [paginator]="true"
+          [rows]="10"
+          [totalRecords]="totalRecords"
+          [loading]="loading"
+          [globalFilterFields]="['fullName', 'email']"
+          dataKey="id"
+        >
+          <ng-template #caption>
+            <div class="flex justify-between">
+              <h3>Usuarios</h3>
+              <input
+                pInputText
+                type="text"
+                (input)="onGlobalFilter($event)"
+                placeholder="Buscar usuarios"
+              />
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="id">ID</th>
+              <th pSortableColumn="fullName">
+                Nombre <p-sortIcon field="fullName"></p-sortIcon>
+              </th>
+              <th pSortableColumn="email">
+                Email <p-sortIcon field="email"></p-sortIcon>
+              </th>
+              <th>Rol</th>
+              <th>Foto</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-user>
+            <tr>
+              <td>{{user.id}}</td>
+              <td>{{user.fullName}}</td>
+              <td>{{user.email}}</td>
+              <td>{{user.rol}}</td>
+              <td>
+                <img
+                  *ngIf="user.profileImage"
+                  [src]="user.profileImage"
+                  alt="Foto de usuario"
+                  class="w-12 h-12 rounded-full"
+                />
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5">No hay usuarios.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-card>
+  </div>
+</div>

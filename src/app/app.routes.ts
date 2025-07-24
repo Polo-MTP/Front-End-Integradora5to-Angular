@@ -9,6 +9,9 @@ import { Register } from './features/auth/register/register';
 import { DashboardLayout } from './pages/layouts/dashboard-layout/dashboard-layout';
 import { Account } from './features/dashboard/account/account';
 import { Home } from './features/dashboard/home/home';
+import { AdminLayout } from './pages/layouts/admin-layout/admin-layout';
+import { HomeAdmin } from './features/admin/home-admin/home-admin';
+import { Users } from './features/admin/users/users';
 
 export const routes: Routes = [
     {
@@ -43,8 +46,18 @@ export const routes: Routes = [
         canActivate: [AuthGuard, ClientGuard],
     },
     {
-        path: 'admin-dashboard',
-        component: Welcome,
+        path: 'admin',
+        component: AdminLayout,
+        children:[
+            {
+                path: 'home',
+                component: HomeAdmin
+            },
+            {
+                path: 'users',
+                component: Users
+            }
+        ],
         canActivate: [AuthGuard, AdminGuard]
     }
 ];

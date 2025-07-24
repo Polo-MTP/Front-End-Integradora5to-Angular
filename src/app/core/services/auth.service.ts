@@ -177,7 +177,7 @@ export class AuthService {
   private redirectByRole(rol: string): void {
     switch (rol) {
       case 'admin':
-        this.router.navigate(['/admin-dashboard']);
+        this.router.navigate(['/admin/home']);
         break;
       case 'cliente':
         this.router.navigate(['/dash/home']);

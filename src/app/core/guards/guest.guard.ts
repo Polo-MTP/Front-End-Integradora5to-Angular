@@ -15,7 +15,7 @@ export const GuestGuard: CanActivateFn = (route, state) => {
   if (user) {
     switch (user.rol) {
       case 'admin':
-        router.navigate(['/admin-dashboard']);
+        router.navigate(['/admin/home']);
         break;
       case 'cliente':
         router.navigate(['/dash/home']);

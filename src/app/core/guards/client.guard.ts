@@ -17,7 +17,7 @@ export const ClientGuard: CanActivateFn = (route, state) => {
 
   const user = authService.getCurrentUser();
   if (user?.rol === 'admin') {
-    router.navigate(['/admin-dashboard']);
+    router.navigate(['/admin/home']);
   } else {
     router.navigate(['/']);
   }

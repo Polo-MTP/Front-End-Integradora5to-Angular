@@ -15,20 +15,20 @@ const MyPreset = definePreset(Aura, {
       800: '#3730a3',
       900: '#312e81',
       950: '#1e1b4b',
-    }, 
+    },
     zinc: {
-    50: '#fafafa',
-    100: '#f4f4f5',
-    200: '#e4e4e7',
-    300: '#d4d4d8',
-    400: '#a1a1aa',
-    500: '#71717a',
-    600: '#52525b',
-    700: '#3f3f46',
-    800: '#27272a',
-    900: '#18181b',
-    950: '#09090b',
-  }
+      50: '#fafafa',
+      100: '#f4f4f5',
+      200: '#e4e4e7',
+      300: '#d4d4d8',
+      400: '#a1a1aa',
+      500: '#71717a',
+      600: '#52525b',
+      700: '#3f3f46',
+      800: '#27272a',
+      900: '#18181b',
+      950: '#09090b',
+    },
   },
   semantic: {
     primary: {
@@ -85,7 +85,7 @@ const MyPreset = definePreset(Aura, {
           filledBackground: '#ffffff',
           filledHoverBackground: '#ffffff',
           filledFocusBackground: '#ffffff',
-        }
+        },
       },
       dark: {
         primary: {
@@ -102,29 +102,28 @@ const MyPreset = definePreset(Aura, {
         },
         surface: {
           0: '#ffffff',
-          50: '{slate.100}',
-          100: '{zinc.100}', //color textos
-          200: '{blue.600}', //color titulos secciones
-          300: '{red.500}',
-          400: '{zinc.100}',
-          500: '{blue.950}',
-          600: '{blue.600}',
-          700: '{zinc.600}', // color de las secciones
-          800: '{zinc.600}', //color cuando h¿aces hover elemento y secciones
-          900: '{zinc.900}', //color de los fondos
-          950: '{zinc.900}',// color de los inputs tambien
-          1000: '{zinc.500}',
+          50: '{slate.50}',
+          100: '{slate.100}',
+          200: '{slate.200}',
+          300: '{slate.300}',
+          400: '{slate.400}',
+          500: '{slate.500}',
+          600: '{slate.600}',
+          700: '{slate.700}',
+          800: '{slate.800}',
+          900: '{slate.900}',
+          950: '{slate.950}',
         },
         formField: {
           color: 'zinc.50',
-          filledBackground: '#ffffff',           // fondo cuando está lleno
+          filledBackground: '#ffffff', // fondo cuando está lleno
           filledHoverBackground: '#ffffff',
           filledFocusBackground: '#ffffff',
           borderColor: '{zinc.500}',
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 });
 
 export default MyPreset;
