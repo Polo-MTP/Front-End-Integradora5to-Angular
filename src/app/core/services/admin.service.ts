@@ -3,7 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { User } from '../types/auth.types';
-import { Users } from '../../features/admin/users/users';
+import { TankPendingResponse } from '../types/admin.types';
+import { TankDetailsResponse } from '../types/admin.types';
+import { aproveTankResponse } from '../types/admin.types';
 
 @Injectable({
   providedIn: 'root',
@@ -20,5 +22,22 @@ export class AdminService {
         params,
       }
     );
+  }
+
+  aproveTank(tankId: number, params: any): Observable<aproveTankResponse> {
+    return this.http.put<aproveTankResponse>(
+      `${this.apiUrl}/admin/tank/aprove/${tankId}`,
+      params
+    );
+  }
+
+  getDetailsTank(id: number): Observable<TankDetailsResponse> {
+    return this.http.get<TankDetailsResponse>(
+      `${this.apiUrl}/admin/tank/details/${id}`
+    );
+  }
+
+  getTanksPending(): Observable<TankPendingResponse> {
+    return this.http.get<TankPendingResponse>(`${this.apiUrl}/admin/tanks`);
   }
 }

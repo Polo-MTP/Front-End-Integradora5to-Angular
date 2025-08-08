@@ -12,6 +12,8 @@ import { Home } from './features/dashboard/home/home';
 import { AdminLayout } from './pages/layouts/admin-layout/admin-layout';
 import { HomeAdmin } from './features/admin/home-admin/home-admin';
 import { Users } from './features/admin/users/users';
+import { Sensors } from './features/admin/sensors/sensors';
+import { TanksPending } from './features/admin/tanks-pending/tanks-pending';
 
 export const routes: Routes = [
     {
@@ -56,6 +58,14 @@ export const routes: Routes = [
             {
                 path: 'users',
                 component: Users
+            },
+            {
+                path: 'sensors',
+                component: Sensors
+            },
+            {
+                path: 'pedidos',
+                component: TanksPending
             }
         ],
         canActivate: [AuthGuard, AdminGuard]

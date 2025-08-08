@@ -1,0 +1,200 @@
+<div class="p-4">
+  <p-toast></p-toast>
+  <div class="mb-4">
+    <p-card styleClass="flex flex-col shadow-1">
+      <div class="flex items-start gap-2 justify-between">
+        <div>
+          <div class="text-2xl leading-8 font-medium">Pedidos Pendientes</div>
+          <div class="mt-1 mb-1.5 leading-6 text-muted-color">
+            Pedidos pendientes de aprobación y envio
+          </div>
+        </div>
+      </div>
+      <div class="flex-1 rounded-lg border border-surface w-full overflow-auto">
+        <p-table [value]="tanksPending" [loading]="loading" dataKey="id">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Nombre</th>
+              <th>Código</th>
+              <th>Fecha Pedido</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-tank>
+            <tr>
+              <td>{{tank.name}}</td>
+              <td>{{tank.uuid}}</td>
+              <td>{{ tank.createdAt | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <span
+                  class="px-2 py-1 rounded-full text-sm font-medium"
+                  [ngClass]="{
+                    'bg-green-100 text-green-800': tank.isActive === 1,
+                    'bg-red-100 text-red-800': tank.isActive !== 1
+                  }"
+                >
+                  {{ tank.isActive === 1 ? 'Activo' : 'Pendiente' }}
+                </span>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <button
+                    pButton
+                    pRipple
+                    icon="pi pi-eye"
+                    class="p-button-sm p-button-outlined p-button-info"
+                    pTooltip="Ver detalle"
+                    tooltipPosition="top"
+                    (click)="openDetailsModal(tank.id)"
+                  ></button>
+
+                  <button
+                    pButton
+                    pRipple
+                    icon="pi pi-check"
+                    class="p-button-sm p-button-outlined p-button-success"
+                    pTooltip="Aprobar Tanque"
+                    tooltipPosition="top"
+                    [disabled]="tank.isActive === 1"
+                    (click)="aprobarTanqueModal(tank)"
+                  ></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5">No hay tanques pendientes.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-card>
+  </div>
+</div>
+
+<p-dialog
+  header="Aprobar Tanque"
+  [(visible)]="aprobarModalVisible"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  [closable]="true"
+  [closeOnEscape]="true"
+>
+  <form [formGroup]="aprobarForm" (ngSubmit)="AprobarTank(tankId)">
+    <div class="flex flex-col gap-4">
+      <div class="field">
+        <label for="tankId" class="block text-900 font-medium mb-2">
+          Código Tanque
+        </label>
+        <input
+          pInputText
+          id="tankId"
+          type="text"
+          formControlName="uuid"
+          placeholder="Ingrese el código del tanque"
+          class="w-full p-inputtext-sm"
+          [class.ng-invalid]="aprobarForm.get('uuid')?.touched && aprobarForm.get('uuid')?.invalid"
+        />
+        <small
+          class="p-error"
+          *ngIf="aprobarForm.get('uuid')?.touched && aprobarForm.get('uuid')?.invalid"
+        >
+          <span *ngIf="aprobarForm.get('uuid')?.errors?.['required']"
+            >El código es obligatorio.</span
+          >
+          <span *ngIf="aprobarForm.get('uuid')?.errors?.['minlength']"
+            >Mínimo 1 caracteres.</span
+          >
+        </small>
+      </div>
+    </div>
+
+    <div class="flex justify-content-end gap-2 mt-4">
+      <button
+        pButton
+        pRipple
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text p-button-sm"
+        type="button"
+        (click)="closeAprobarModal()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Guardar"
+        icon="pi pi-check"
+        class="p-button-sm"
+        type="submit"
+        [disabled]="aprobarForm.invalid || loading"
+        [loading]="loading"
+      ></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+  header="Detalle del Pedido"
+  [(visible)]="detailsModalVisible"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  [closable]="true"
+>
+  <ng-container *ngIf="loadingDetail">
+    <div class="flex justify-center items-center py-4">
+      <i class="pi pi-spinner pi-spin text-2xl"></i>
+      <span class="ml-2">Cargando...</span>
+    </div>
+  </ng-container>
+
+  <div class="space-y-4">
+    <div class="border-b pb-4">
+      <h3 class="text-lg font-semibold mb-3">Información del Pedido</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <div><strong>Usuario:</strong> {{ TankDetails?.user?.fullName }}</div>
+        <div><strong>Código:</strong> {{ TankDetails?.tank?.uuid }}</div>
+        <div>
+          <strong>Fecha Pedido:</strong> {{ TankDetails?.tank?.createdAt |
+          date:'dd/MM/yyyy HH:mm' }}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="TankDetails?.devices!.length > 0">
+      <h3 class="text-lg font-semibold mb-3">
+        Dispositivos del Pedido ({{ TankDetails?.devices!.length }})
+      </h3>
+      <div class="space-y-3">
+        <div
+          *ngFor="let device of TankDetails?.devices; let i = index"
+          class="border rounded-lg p-3"
+        >
+          <div class="grid grid-cols-2 gap-2 text-sm">
+            <div><strong>Dispositivo:</strong> {{ device.name || 'N/A' }}</div>
+            <div>
+              <strong>Código:</strong> {{ device.code || device.code || 'N/A' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="!TankDetails?.devices || TankDetails?.devices!.length === 0"
+      class="text-center py-4 text-gray-500"
+    >
+      <i class="pi pi-info-circle text-2xl mb-2"></i>
+      <p>No hay dispositivos asociados a este pedido</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!loadingDetail && !TankDetails">
+    <div class="text-center py-4">
+      <span>No se pudieron cargar los detalles</span>
+    </div>
+  </ng-container>
+</p-dialog>

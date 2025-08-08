@@ -52,10 +52,16 @@ export class AdminLayout {
           {
             label: 'Sensors',
             icon: 'pi pi-chart-scatter',
+            command: () => {
+              this.goToPage('/admin/sensors');
+            }
           },
           {
             label: 'Pedidos', 
             icon: 'pi pi-truck',
+            command: () => {
+              this.goToPage('/admin/pedidos');
+            }
           },
           {
             label: 'configuracion',

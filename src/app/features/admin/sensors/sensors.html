@@ -1,0 +1,295 @@
+<div class="p-4">
+    <p-toast></p-toast>
+  <div class="mb-4">
+    <p-card styleClass="flex flex-col shadow-1">
+      <div class="flex items-start gap-2 justify-between">
+        <div>
+          <div class="text-2xl leading-8 font-medium">Sensores</div>
+          <div class="mt-1 leading-6 text-muted-color">
+            The analytics dashboard for your customers
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 mb-4 flex items-center justify-between">
+        <h1>List Sensor Types</h1>
+        <button
+          pButton
+          pRipple
+          label="Nuevo Sensor"
+          icon="pi pi-plus"
+          class="p-button-sm p-button-outlined p-button-success"
+          (click)="createSensorModal()"
+        ></button>
+      </div>
+      <div class="flex-1 rounded-lg border border-surface w-full overflow-auto">
+        <p-table
+          [value]="sensors"
+          [lazy]="true"
+          (onLazyLoad)="loadSensors()"
+          [loading]="loading"
+          dataKey="id"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="id">ID</th>
+              <th>Nombre</th>
+              <th>Codigo</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-sensors>
+            <tr>
+              <td>{{sensors.id}}</td>
+              <td>{{sensors.name}}</td>
+              <td>{{sensors.code}}</td>
+              <td>
+                <span
+                  class="px-2 py-1 rounded-full text-sm font-medium"
+                  [ngClass]="{
+                    'bg-green-100 text-green-800': sensors.isActive === 1,
+                    'bg-red-100 text-red-800': sensors.isActive !== 1
+                  }"
+                >
+                  {{ sensors.isActive === 1 ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <button
+                    pButton
+                    pRipple
+                    icon="pi pi-pencil"
+                    class="p-button-sm p-button-outlined p-button-info"
+                    pTooltip="Editar sensor"
+                    tooltipPosition="top"
+                    (click)="editSensor(sensors)"
+                  ></button>
+                  <button
+                    pButton
+                    pRipple
+                    icon="pi pi-trash"
+                    class="p-button-sm p-button-outlined p-button-danger"
+                    pTooltip="Eliminar sensor"
+                    tooltipPosition="top"
+                    (click)="deleteSensor(sensors.id)"
+                  ></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5">No hay Sensores.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-card>
+  </div>
+
+  <p-dialog
+    header="Nuevo Sensor"
+    [(visible)]="createModalVisible"
+    [modal]="true"
+    [style]="{width: '550px'}"
+    [closable]="true"
+    [closeOnEscape]="true"
+  > 
+    <form [formGroup]="createSensorForm" (ngSubmit)="creteSensor()">
+      <div class="flex flex-column gap-4">
+        <div class="field">
+          <label for="sensorName" class="block text-900 font-medium mb-2">
+            Nombre
+          </label>
+          <input
+            pInputText
+            id="sensorName"
+            type="text"
+            formControlName="name"
+            placeholder="Ingrese el nombre del sensor"
+            class="w-full p-inputtext-sm"
+            [class.ng-invalid]="createSensorForm.get('name')?.invalid && createSensorForm.get('name')?.touched"
+          />
+          <small
+            class="p-error"
+            *ngIf="createSensorForm.get('name')?.invalid && createSensorForm.get('name')?.touched"
+          >
+            El nombre es requerido.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="sensorCode" class="block text-900 font-medium mb-2">
+            Código
+          </label>
+          <input
+            pInputText
+            id="sensorCode"
+            type="text"
+            formControlName="code"
+            placeholder="Ingrese el código del sensor"
+            class="w-full p-inputtext-sm"
+            [class.ng-invalid]="createSensorForm.get('code')?.invalid && createSensorForm.get('code')?.touched"
+          />
+          <small
+            class="p-error"
+            *ngIf="createSensorForm.get('code')?.invalid && createSensorForm.get('code')?.touched"
+          >
+            El código es requerido.
+          </small>
+        </div>
+
+        <div class="field">
+          <label class="block text-900 font-medium mb-2">Estado</label>
+          <div class="flex gap-4">
+            <div class="flex align-items-center">
+              <p-radioButton
+                inputId="active"
+                name="status"
+                value="1"
+                formControlName="isActive"
+              ></p-radioButton>
+              <label for="active" class="ml-2 cursor-pointer">Activo</label>
+            </div>
+            <div class="flex align-items-center">
+              <p-radioButton
+                inputId="inactive"
+                name="status"
+                value="0"
+                formControlName="isActive"
+              ></p-radioButton>
+              <label for="inactive" class="ml-2 cursor-pointer">Inactivo</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex justify-content-end gap-2 mt-4">
+        <button
+          pButton
+          pRipple
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text p-button-sm"
+          type="button"
+          (click)="closeCreateModal()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Guardar"
+          icon="pi pi-check"
+          class="p-button-sm"
+          type="submit"
+          [disabled]="createSensorForm.invalid || saving"
+          [loading]="saving"
+        ></button>
+      </div>
+    </form>
+  </p-dialog>
+
+  <p-dialog
+    [(visible)]="editModalVisible"
+    [modal]="true"
+    [style]="{width: '550px'}"
+    header="Editar Sensor"
+    [closable]="true"
+    [closeOnEscape]="true"
+  >
+    <form [formGroup]="editSensorForm" (ngSubmit)="saveSensor()">
+      <div class="flex flex-column gap-4">
+        <div class="field">
+          <label for="sensorName" class="block text-900 font-medium mb-2">
+            Nombre
+          </label>
+          <input
+            pInputText
+            id="sensorName"
+            type="text"
+            formControlName="name"
+            placeholder="Ingrese el nombre del sensor"
+            class="w-full p-inputtext-sm"
+            [class.ng-invalid]="editSensorForm.get('name')?.invalid && editSensorForm.get('name')?.touched"
+          />
+          <small
+            class="p-error"
+            *ngIf="editSensorForm.get('name')?.invalid && editSensorForm.get('name')?.touched"
+          >
+            El nombre es requerido.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="sensorCode" class="block text-900 font-medium mb-2">
+            Código <span class="text-red-500">*</span>
+          </label>
+          <input
+            pInputText
+            id="sensorCode"
+            type="text"
+            formControlName="code"
+            placeholder="Ingrese el código del sensor"
+            class="w-full p-inputtext-sm"
+            [class.ng-invalid]="editSensorForm.get('code')?.invalid && editSensorForm.get('code')?.touched"
+          />
+          <small
+            class="p-error"
+            *ngIf="editSensorForm.get('code')?.invalid && editSensorForm.get('code')?.touched"
+          >
+            El código es requerido.
+          </small>
+        </div>
+
+        <div class="field">
+          <label class="block text-900 font-medium mb-2">Estado</label>
+          <div class="flex gap-4">
+            <div class="flex align-items-center">
+              <p-radioButton
+                inputId="active"
+                name="status"
+                value="1"
+                formControlName="isActive"
+              ></p-radioButton>
+              <label for="active" class="ml-2 cursor-pointer">Activo</label>
+            </div>
+            <div class="flex align-items-center">
+              <p-radioButton
+                inputId="inactive"
+                name="status"
+                value="0"
+                formControlName="isActive"
+              ></p-radioButton>
+              <label for="inactive" class="ml-2 cursor-pointer">Inactivo</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-content-end gap-2 mt-4">
+        <button
+          pButton
+          pRipple
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text p-button-sm"
+          type="button"
+          (click)="closeEditModal()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Guardar"
+          icon="pi pi-check"
+          class="p-button-sm"
+          type="submit"
+          [disabled]="editSensorForm.invalid || saving"
+          [loading]="saving"
+        ></button>
+      </div>
+    </form>
+  </p-dialog>
+</div>

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { AdminService } from '../../../core/services/admin.service';
-import { User } from '../../../core/types/admin.types';
+import { UserIndex } from '../../../core/types/admin.types';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
@@ -17,7 +17,7 @@ import { InputTextModule } from 'primeng/inputtext';
   styleUrls: ['./users.css'],
 })
 export class Users {
-  users: User[] = [];
+  users: UserIndex[] = [];
   totalRecords = 0;
   loading = true;
 
