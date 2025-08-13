@@ -52,19 +52,16 @@
     </p-card>   
   </div>    
 
-  <!-- Tank selected but no sensors -->   
   <div *ngIf="!loading && hasSelectedTank && sensors.length === 0">     
     <p-card styleClass="text-center py-6">       
       <i class="pi pi-desktop text-6xl text-400 mb-3"></i>       
       <h3 class="text-xl font-medium mb-2">No hay sensores configurados</h3>       
       <p class="text-color-secondary">Esta pecera no tiene sensores asignados.</p>     
     </p-card>   
-  </div>    
+  </div>   
 
-  <!-- Dashboard with sensors -->   
-  <div *ngIf="!loading && hasSelectedTank && sensors.length > 0">          
-    <!-- Tank Info Card -->      
-    <!-- Sensors Grid - SIN ESPACIOS FANTASMA -->     
+
+  <div *ngIf="!loading && hasSelectedTank && sensors.length > 0">             
     <div class="flex flex-wrap gap-3">       
       <div *ngFor="let sensor of sensors; trackBy: trackBySensorId"             
            class="flex-1 min-w-full sm:min-w-0 sm:flex-none sensor-card-animate"            
@@ -77,7 +74,6 @@
     </div>    
   </div>    
 
-  <!-- No tank selected -->   
   <div *ngIf="!loading && hasTanks && !hasSelectedTank">     
     <p-card styleClass="text-center py-6">       
       <i class="pi pi-arrow-up text-6xl text-400 mb-3"></i>       
@@ -87,7 +83,6 @@
   </div>  
 </div>
 
-<!-- Estilos CSS para animaciones solamente -->
 <style>
 .sensor-card-animate {
   animation: fadeInUp 0.4s ease-out;

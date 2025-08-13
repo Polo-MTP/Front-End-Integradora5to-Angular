@@ -14,6 +14,7 @@ import { HomeAdmin } from './features/admin/home-admin/home-admin';
 import { Users } from './features/admin/users/users';
 import { Sensors } from './features/admin/sensors/sensors';
 import { TanksPending } from './features/admin/tanks-pending/tanks-pending';
+import { Camera } from './features/dashboard/camera/camera';
 
 export const routes: Routes = [
     {
@@ -43,6 +44,10 @@ export const routes: Routes = [
             {
                 path: 'account',
                 component: Account
+            },
+            {
+                path: 'camera',
+                component: Camera
             }
         ],
         canActivate: [AuthGuard, ClientGuard],
@@ -66,7 +71,7 @@ export const routes: Routes = [
             {
                 path: 'pedidos',
                 component: TanksPending
-            }
+            },
         ],
         canActivate: [AuthGuard, AdminGuard]
     }

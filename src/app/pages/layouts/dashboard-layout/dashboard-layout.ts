@@ -44,16 +44,11 @@ export class DashboardLayout {
             }
           },
           {
-            label: 'search',
-            icon: 'pi pi-search',
-          },
-          {
-            label: 'Mis peceras',
-            icon: 'pi pi-wrench',
-          },
-          {
-            label: 'Mis pedidos',
-            icon: 'pi pi-shopping-cart',
+            label: 'Camera',
+            icon: 'pi pi-camera',
+            command: () => {
+              this.goToPage('/dash/camera');
+            }
           },
           {
             label: 'configuracion',

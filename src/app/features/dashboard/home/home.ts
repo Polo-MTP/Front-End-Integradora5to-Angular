@@ -161,6 +161,6 @@ export class Home implements OnInit, OnDestroy {
   if (sensorCount === 1) return '100%';
   if (sensorCount === 2) return 'calc(50% - 0.75rem)';
   if (sensorCount === 3) return 'calc(33.333% - 0.75rem)';
-  return 'calc(25% - 0.75rem)'; // 4 o más sensores
+  return 'calc(25% - 0.75rem)'; 
 }
 }
