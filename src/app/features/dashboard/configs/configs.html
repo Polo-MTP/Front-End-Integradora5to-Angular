@@ -1,0 +1,32 @@
+<div class="p-4 h-96">
+  <div class="mb-4 h-full">
+    <div class="card h-full">
+      <p-datepicker
+        class="w-full"
+        [(ngModel)]="date"
+        [inline]="true"
+        [showWeek]="true"
+        (onSelect)="onDateSelect($event)"
+        [minDate]="minDate"
+      >
+        <ng-template #date let-date>
+          <div class="flex items-center justify-center w-full h-full">
+            <ng-container
+              *ngIf="getConfigsForDate(getDateFromDateObject(date)).length > 0; else showDay"
+            >
+              <div
+                class="flex items-center justify-center w-10 h-10 bg-blue-500 rounded-full text-white font-bold shadow-md"
+                [title]="getConfigsForDate(getDateFromDateObject(date)).length + ' configuración(es)'"
+              >
+                ⌚
+              </div>
+            </ng-container>
+            <ng-template #showDay>
+              <span>{{ date.day }}</span>
+            </ng-template>
+          </div>
+        </ng-template>
+      </p-datepicker>
+    </div>
+  </div>
+</div>

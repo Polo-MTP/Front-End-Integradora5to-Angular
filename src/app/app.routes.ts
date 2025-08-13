@@ -15,6 +15,9 @@ import { Users } from './features/admin/users/users';
 import { Sensors } from './features/admin/sensors/sensors';
 import { TanksPending } from './features/admin/tanks-pending/tanks-pending';
 import { Camera } from './features/dashboard/camera/camera';
+import { Configs } from './features/dashboard/configs/configs';
+import { Stadistics } from './features/dashboard/stadistics/stadistics';
+
 
 export const routes: Routes = [
     {
@@ -48,6 +51,14 @@ export const routes: Routes = [
             {
                 path: 'camera',
                 component: Camera
+            },
+            {
+                path: 'configs',
+                component: Configs
+            },
+            {
+                path: 'stadistics',
+                component: Stadistics
             }
         ],
         canActivate: [AuthGuard, ClientGuard],

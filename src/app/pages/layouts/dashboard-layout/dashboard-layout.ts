@@ -10,10 +10,11 @@ import { User } from "../../../core/types/auth.types";
 import { AuthService } from "../../../core/services/auth.service";
 import { TopMenu } from "../../../shared/components/top-menu/top-menu";
 import { Router } from "@angular/router";
+import { Account } from "../../../features/dashboard/account/account";
 
 @Component({
   selector: 'app-dashboard-layout',
-  imports: [AvatarModule,RouterOutlet, BadgeModule, RippleModule, MenuModule, CommonModule, TopMenu],
+  imports: [AvatarModule, RouterOutlet, BadgeModule, RippleModule, MenuModule, CommonModule, TopMenu],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.css'
 })
@@ -51,8 +52,18 @@ export class DashboardLayout {
             }
           },
           {
-            label: 'configuracion',
+            label: 'configuraciones',
             icon: 'pi pi-cog',
+            command: () => {
+              this.goToPage('/dash/configs');
+            }
+          },
+          {
+            label: 'Estadisticas',
+            icon: 'pi pi-chart-bar',
+            command: () => {
+              this.goToPage('/dash/stadistics');
+            }
           }
         ]
       },
