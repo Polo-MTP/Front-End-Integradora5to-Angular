@@ -27,12 +27,20 @@ export class TankService {
     return this.http.post<RegisterTankResponse>(`${this.apiUrl}/tanks`, data);
   }
 
+  deleteTank(tankId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/tanks/${tankId}`);
+  }
+
   getDevices(): Observable<getDevicesResponse> {
     return this.http.get<getDevicesResponse>(`${this.apiUrl}/sensor-types`);
   }
 
   getTanksList(): Observable<ResponseTanksList> {
     return this.http.get<ResponseTanksList>(`${this.apiUrl}/tanks`);
+  }
+
+  getTanksAll(): Observable<ResponseTanksList> {
+    return this.http.get<ResponseTanksList>(`${this.apiUrl}/tanks/all`);
   }
 
   getTankById(id: number): Observable<ResponseTankById> {

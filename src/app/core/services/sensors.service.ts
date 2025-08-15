@@ -26,6 +26,6 @@ export class SensorsService {
   }
 
   deleteSensor(sensorId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/sensors/${sensorId}`);
+    return this.http.delete(`${this.apiUrl}/admin/sensor/${sensorId}`);
   }
 }

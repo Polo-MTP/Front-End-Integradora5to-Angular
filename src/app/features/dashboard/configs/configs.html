@@ -1,11 +1,72 @@
 <div class="p-4 h-96">
-  <div class="mb-4 h-full">
-    <div class="card h-full">
+  <div class="mb-4">
+    <p-card styleClass="border-none shadow-1">
+      <div class="flex align-items-center gap-3">
+        <div class="flex-1">
+          <h1 class="text-2xl font-bold m-0 mb-1">Mis Peceras</h1>
+        </div>
+        <div class="flex flex-column gap-2 px-2">
+          <div class="flex align-items-center justify-content-between p-3">
+            <div class="flex align-items-center gap-3">
+              <div
+                class="w-3rem h-3rem border-circle bg-blue-100 flex align-items-center justify-content-center"
+              ></div>
+              <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+              >
+                <h2 class="text-xl font-semibold m-0">
+                  {{ selectedTank?.name }}
+                </h2>
+
+                <select
+                  id="tank-selector"
+                  class="p-inputtext p-component h-10 w-10 text-sm sm:w-auto"
+                  [(ngModel)]="selectedTankId"
+                  (ngModelChange)="onTankChange($event)"
+                  [disabled]="loading || !hasTanks"
+                  style="min-width: 200px"
+                >
+                  <option value="" disabled>Selecciona una pecera</option>
+                  <option
+                    *ngFor="let tank of tanks; trackBy: trackByTankId"
+                    [value]="tank.id"
+                  >
+                    {{ tank.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Loading State -->
+  <div
+    *ngIf="loading"
+    class="flex justify-content-center align-items-center py-8"
+  >
+    <p-progressSpinner styleClass="w-3rem h-3rem"></p-progressSpinner>
+  </div>
+
+  <!-- No tanks available -->
+  <div *ngIf="!loading && !hasTanks">
+    <p-card styleClass="text-center py-6">
+      <i class="pi pi-inbox text-6xl text-400 mb-3"></i>
+      <h3 class="text-xl font-medium mb-2">No hay peceras disponibles</h3>
+      <p class="text-color-secondary">
+        Agrega una pecera para comenzar a monitorear sensores.
+      </p>
+    </p-card>
+  </div>
+
+  <div *ngIf="!loading && hasTanks" class="mb-4 h-full">
+    <div class="card flex justify-center">
       <p-datepicker
-        class="w-full"
+        class="w-4/5"
         [(ngModel)]="date"
         [inline]="true"
-        [showWeek]="true"
         (onSelect)="onDateSelect($event)"
         [minDate]="minDate"
       >
@@ -29,4 +90,200 @@
       </p-datepicker>
     </div>
   </div>
+
+  <p-dialog
+    [header]="getModalTitle()"
+    [(visible)]="displayConfigModal"
+    [modal]="true"
+    [style]="{width: '90vw', maxWidth: '800px'}"
+    [closable]="true"
+    [closeOnEscape]="true"
+  >
+    <div class="p-6 max-h-[70vh] overflow-y-auto">
+      <div *ngIf="configsForSelectedDate.length > 0" class="mb-6">
+        <h4 class="text-lg font-semibold mb-4 flex items-center">
+          <i class="pi pi-clock mr-2 text-blue-500"></i>
+          Configuraciones Existentes ({{ configsForSelectedDate.length }})
+        </h4>
+
+        <div class="space-y-3">
+          <div
+            *ngFor="let config of configsForSelectedDate"
+            class="flex items-center justify-between p-4 border rounded-lg transition-all duration-200"
+          >
+            <div class="flex items-center space-x-4">
+              <!-- Icono -->
+              <div
+                [class]="getConfigIcon(config.code!).class"
+                class="w-12 h-12 rounded-full flex items-center justify-center shadow-sm shrink-0"
+              >
+                <i
+                  [class]="getConfigIcon(config.code!).icon"
+                  class="text-lg"
+                ></i>
+              </div>
+
+              <!-- Tipo de Configuración -->
+              <div class="flex-1 min-w-0">
+                <span
+                  class="block font-medium text-color truncate"
+                  [title]="config.configType"
+                >
+                  {{ config.configType }}
+                </span>
+              </div>
+
+              <!-- Código y Hora -->
+              <div class="flex flex-col min-w-0">
+                <h6
+                  class="font-semibold text-color truncate"
+                  [title]="config.code"
+                >
+                  {{ config.code }}
+                </h6>
+                <p
+                  class="text-sm text-color-secondary flex items-center truncate"
+                  [title]="formatTime(config.configValue!)"
+                >
+                  <i class="pi pi-clock mr-1"></i>
+                  {{ formatTime(config.configValue!) }}
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2">
+              <button
+                (click)="openEditConfigMode(config)"
+                class="px-3 py-2 text-sm bg-blue-500 rounded-md hover:bg-blue-600 transition-colors duration-200 flex items-center justify-center"
+              >
+                <i class="pi pi-pencil mr-1"></i>
+                Editar
+              </button>
+
+              <button
+                (click)="deleteConfig(config)"
+                class="px-3 py-2 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 flex items-center justify-center"
+              >
+                <i class="pi pi-trash mr-1"></i>
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="configsForSelectedDate.length === 0"
+        class="text-center py-8 mb-6"
+      >
+        <i class="pi pi-calendar text-6xl text-gray-300 mb-4"></i>
+        <p class="text-lg font-medium mb-2">
+          No hay configuraciones para esta fecha
+        </p>
+        <p class="text-sm">
+          Puedes agregar una nueva configuración usando el botón de abajo
+        </p>
+      </div>
+
+      <div class="border-t pt-6">
+        <div
+          class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4"
+        >
+          <h4 class="text-lg font-semibold flex items-center">
+            <i
+              class="pi {{ isEditMode ? 'pi-pencil' : 'pi-plus' }} mr-2 text-green-500"
+            ></i>
+            {{ isEditMode ? 'Editar Configuración' : 'Agregar Nueva
+            Configuración' }}
+          </h4>
+
+          <button
+            *ngIf="!isEditMode"
+            (click)="openAddConfigMode()"
+            class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 flex items-center shadow-sm"
+          >
+            <i class="pi pi-plus mr-2"></i>
+            Nueva Configuración
+          </button>
+        </div>
+
+        <div *ngIf="showConfigForm" class="rounded-lg p-6 border">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium">
+                <i class="pi pi-cog mr-1"></i>
+                Tipo de Configuración *
+              </label>
+              <p-select
+                [options]="configTypes"
+                [(ngModel)]="newConfig.code"
+                placeholder="Selecciona el tipo"
+                optionLabel="label"
+                optionValue="value"
+                styleClass="w-full"
+              >
+              </p-select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-2">
+                <i class="pi pi-clock mr-1"></i>
+                Hora *
+              </label>
+              <input
+                type="time"
+                [(ngModel)]="newConfig.configValue"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-2">
+                <i class="pi pi-calendar mr-1"></i>
+                Fecha
+              </label>
+              <input
+                pInputText
+                [value]="selectedDate | date:'dd/MM/yyyy'"
+                readonly
+                class="w-full cursor-not-allowed"
+              />
+            </div>
+
+            <div
+              class="md:col-span-2 flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t"
+            >
+              <button
+                (click)="resetForm()"
+                class="px-6 py-2 border rounded-md transition-colors duration-200 flex items-center justify-center"
+              >
+                <i class="pi pi-times mr-2"></i>
+                Cancelar
+              </button>
+
+              <button
+                (click)="saveConfig()"
+                class="px-6 py-2 bg-blue-500 rounded-md hover:bg-blue-600 transition-colors duration-200 flex items-center justify-center shadow-sm"
+              >
+                <i class="pi pi-check mr-2"></i>
+                {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end p-4 border-t">
+        <button
+          (click)="closeModal()"
+          class="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-200 flex items-center"
+        >
+          <i class="pi pi-times mr-2"></i>
+          Cerrar
+        </button>
+      </div>
+    </ng-template>
+  </p-dialog>
 </div>

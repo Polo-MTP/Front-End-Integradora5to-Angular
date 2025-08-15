@@ -24,6 +24,10 @@ export class AdminService {
     );
   }
 
+  getDataDashboard(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/admin/dashboard`);
+  }
+
   aproveTank(tankId: number, params: any): Observable<aproveTankResponse> {
     return this.http.put<aproveTankResponse>(
       `${this.apiUrl}/admin/tank/aprove/${tankId}`,

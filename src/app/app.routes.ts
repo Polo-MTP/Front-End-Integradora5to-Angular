@@ -17,6 +17,7 @@ import { TanksPending } from './features/admin/tanks-pending/tanks-pending';
 import { Camera } from './features/dashboard/camera/camera';
 import { Configs } from './features/dashboard/configs/configs';
 import { Stadistics } from './features/dashboard/stadistics/stadistics';
+import { MisPeceras } from './features/dashboard/mis-peceras/mis-peceras';
 
 
 export const routes: Routes = [
@@ -59,6 +60,10 @@ export const routes: Routes = [
             {
                 path: 'stadistics',
                 component: Stadistics
+            },
+            {
+                path: 'Tanks',
+                component: MisPeceras
             }
         ],
         canActivate: [AuthGuard, ClientGuard],

@@ -1,0 +1,251 @@
+<div class="p-4">
+  <p-toast></p-toast>
+  <p-confirmdialog></p-confirmdialog>
+  
+  <div class="mb-4">
+    <p-card styleClass="flex flex-col shadow-1">
+      <div class="flex items-start gap-2 justify-between">
+        <div>
+          <div class="text-2xl leading-8 font-medium">Peceras</div>
+          <div class="mt-1 leading-6 text-muted-color">
+            Gestiona tus acuarios inteligentes
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-5 mb-4 flex items-center justify-between">
+        <h1>Lista de Peceras</h1>
+        <button
+          pButton
+          pRipple
+          label="Nueva Pecera"
+          icon="pi pi-plus"
+          class="p-button-sm p-button-outlined p-button-success"
+          (click)="showNewTankModal()"
+        ></button>
+      </div>
+      
+      <div class="flex-1 rounded-lg border border-surface w-full overflow-auto">
+        <p-table
+          [value]="tanks"
+          [lazy]="true"
+          (onLazyLoad)="loadTanks()"
+          [loading]="loading"
+          dataKey="id"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="id">ID</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </ng-template>
+          
+          <ng-template pTemplate="body" let-tanks>
+            <tr>
+              <td>{{tanks.id}}</td>
+              <td>{{tanks.name}}</td>
+              <td>{{tanks.description}}</td>
+              <td>
+                <span
+                  class="px-2 py-1 rounded-full text-sm font-medium"
+                  [ngClass]="{
+                    'bg-green-100 text-green-800': tanks.isActive === 1,
+                    'bg-red-100 text-red-800': tanks.isActive !== 1
+                  }"
+                >
+                  {{ tanks.isActive === 1 ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <button
+                    pButton
+                    pRipple
+                    icon="pi pi-pencil"
+                    class="p-button-sm p-button-outlined p-button-info"
+                    pTooltip="Editar pecera"
+                    tooltipPosition="top"
+                  ></button>
+                  <button
+                    pButton
+                    pRipple
+                    icon="pi pi-trash"
+                    class="p-button-sm p-button-outlined p-button-danger"
+                    pTooltip="Eliminar pecera"
+                    (click)="deleteTank($event,tanks.id, tanks.name)"
+                    tooltipPosition="top"
+                  ></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5">No hay Peceras registradas.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Modal para nueva pecera -->
+  <p-dialog
+    header="Registrar Nueva Pecera"
+    [(visible)]="showNewTankDialog"
+    [style]="{ width: '90vw', maxWidth: '800px' }"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="p-fluid"
+  >
+    <form [formGroup]="aquariumForm" (ngSubmit)="onSubmitAquarium()" class="space-y-6">
+      <!-- Información básica -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="relative">
+          <p-floatlabel>
+            <input
+              id="aquariumName"
+              pInputText
+              formControlName="aquariumName"
+              autocomplete="off"
+              class="w-full"
+            />
+            <label for="aquariumName">Nombre de la Pecera *</label>
+          </p-floatlabel>
+          <small 
+            class="text-red-500 block mt-1" 
+            *ngIf="aquariumForm.get('aquariumName')?.touched && aquariumForm.get('aquariumName')?.errors"
+          >
+            El nombre es requerido (mín. 3 caracteres, máx. 15)
+          </small>
+        </div>
+
+        <div class="relative">
+          <p-floatlabel>
+            <input
+              id="description"
+              pInputText
+              formControlName="description"
+              autocomplete="off"
+              class="w-full"
+            />
+            <label for="description">Descripción *</label>
+          </p-floatlabel>
+          <small 
+            class="text-red-500 block mt-1" 
+            *ngIf="aquariumForm.get('description')?.touched && aquariumForm.get('description')?.errors"
+          >
+            La descripción es requerida (mín. 5 caracteres)
+          </small>
+        </div>
+      </div>
+
+      <!-- Selección de sensores -->
+      <div class="mt-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-surface-700 dark:text-surface-200 flex items-center">
+            <i class="pi pi-cog mr-2 text-blue-500"></i>
+            Selecciona Sensores para tu Pecera *
+          </h3>
+          <p-badge 
+            [value]="getTotalSensors() + '/' + MAX_SENSORS" 
+            severity="info"
+          />
+        </div>
+
+        <!-- Loading de sensores -->
+        <div *ngIf="loadingSensorTypes" class="flex items-center justify-center p-8">
+          <p-progressSpinner strokeWidth="4" />
+          <span class="ml-3">Cargando tipos de sensores...</span>
+        </div>
+
+        <!-- Error al cargar sensores -->
+        <div *ngIf="sensorTypesError && !loadingSensorTypes" 
+             class="p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg text-sm border-l-4 border-red-500 mb-4">
+          <i class="pi pi-exclamation-triangle mr-2"></i>
+          {{ sensorTypesError }}
+          <p-button 
+            label="Reintentar" 
+            size="small" 
+            severity="secondary"
+            class="ml-2" 
+            (onClick)="loadSensorTypes()"
+          />
+        </div>
+
+        <!-- Grid de sensores -->
+        <div *ngIf="!loadingSensorTypes && !sensorTypesError" 
+             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+          <div 
+            *ngFor="let sensor of sensorTypes" 
+            class="border border-surface-200 dark:border-surface-700 rounded-lg p-4 hover:shadow-md transition-shadow duration-300"
+          >
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-medium text-surface-700 dark:text-surface-200 text-sm">
+                {{ sensor.name }}
+              </h4>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <p-button 
+                  icon="pi pi-minus" 
+                  size="small" 
+                  severity="secondary"
+                  [disabled]="getSensorQuantity(sensor.id) === 0"
+                  (onClick)="removeSensor(sensor.id)"
+                />
+                <span class="mx-2 font-medium min-w-[2rem] text-center text-sm">
+                  {{ getSensorQuantity(sensor.id) }}
+                </span>
+                <p-button 
+                  icon="pi pi-plus" 
+                  size="small" 
+                  severity="primary"
+                  [disabled]="!canAddMoreSensors()"
+                  (onClick)="addSensor(sensor.id)"
+                />
+              </div>
+              <p-badge 
+                *ngIf="getSensorQuantity(sensor.id) > 0"
+                [value]="getSensorQuantity(sensor.id)" 
+                severity="success"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Mensaje si no hay sensores seleccionados -->
+        <div *ngIf="!hasSensorsSelected() && !loadingSensorTypes" 
+             class="p-3 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-lg text-sm border-l-4 border-yellow-500 mb-4">
+          <i class="pi pi-exclamation-triangle mr-2"></i>
+          Debes seleccionar al menos un sensor para tu pecera.
+        </div>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-2">
+        <p-button 
+          label="Cancelar" 
+          severity="secondary" 
+          icon="pi pi-times"
+          (onClick)="hideNewTankModal()"
+          [disabled]="savingTank"
+        />
+        <p-button 
+          label="Registrar Pecera" 
+          icon="pi pi-check" 
+          [loading]="savingTank"
+          [disabled]="!aquariumForm.valid || !hasSensorsSelected() || savingTank"
+          (onClick)="onSubmitAquarium()"
+        />
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>

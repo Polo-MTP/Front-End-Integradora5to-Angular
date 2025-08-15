@@ -1,5 +1,6 @@
 <div class="flex min-h-screen">
   <p-menu
+    *ngIf="!isMobile"
     [model]="items"
     class="flex justify-center"
     styleClass="w-full md:w-60"
@@ -67,6 +68,91 @@
       </button>
     </ng-template>
   </p-menu>
+
+  <p-drawer *ngIf="isMobile" [(visible)]="drawerVisible" [modal]="true">
+  <ng-template #headless>
+    <div class="flex flex-col h-full">
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 pt-4 shrink-0">
+        <span class="inline-flex items-center gap-2">
+          <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Reemplaza con path válido -->
+            <rect width="31" height="33" fill="#ccc"/>
+          </svg>
+          <span class="font-semibold text-2xl text-primary">Your Logo</span>
+        </span>
+        <span>
+          <p-button type="button" icon="pi pi-times" rounded="true" outlined="true"
+            styleClass="h-8 w-8"
+            (click)="drawerVisible = false">
+          </p-button>
+        </span>
+      </div>
+
+      <!-- Body -->
+      <div class="overflow-y-auto">
+        <!-- Home Section -->
+        <ul class="list-none p-4 m-0">
+          <li>
+            <span class="font-medium text-surface-600 dark:text-surface-200">Home</span>
+          </li>
+          <li>
+            <a pRipple class="flex items-center p-4 gap-2 hover:bg-surface-100 dark:hover:bg-surface-700 rounded"
+               (click)="goToPage('/dash/home'); drawerVisible = false">
+              <i class="pi pi-home"></i> Inicio
+            </a>
+          </li>
+          <li>
+            <a pRipple class="flex items-center p-4 gap-2 hover:bg-surface-100 dark:hover:bg-surface-700 rounded"
+               (click)="goToPage('/dash/Tanks'); drawerVisible = false">
+              <i class="pi pi-box"></i> Mis Peceras
+            </a>
+          </li>
+          <li>
+            <a pRipple class="flex items-center p-4 gap-2 hover:bg-surface-100 dark:hover:bg-surface-700 rounded"
+               (click)="goToPage('/dash/camera'); drawerVisible = false">
+              <i class="pi pi-camera"></i> Camera
+            </a>
+          </li>
+          <li>
+            <a pRipple class="flex items-center p-4 gap-2 hover:bg-surface-100 dark:hover:bg-surface-700 rounded"
+               (click)="goToPage('/dash/configs'); drawerVisible = false">
+              <i class="pi pi-calendar-clock"></i> Configuraciones
+            </a>
+          </li>
+        </ul>
+
+        <!-- Account Section -->
+        <ul class="list-none p-4 m-0 mt-auto">
+          <li>
+            <span class="font-medium text-surface-600 dark:text-surface-200">Account</span>
+          </li>
+          <li>
+            <a pRipple class="flex items-center p-4 gap-2 hover:bg-surface-100 dark:hover:bg-surface-700 rounded"
+               (click)="goToPage('/dash/account'); drawerVisible = false">
+              <i class="pi pi-user"></i> Profile
+            </a>
+          </li>
+          <li>
+            <a pRipple class="flex items-center p-4 gap-2 hover:bg-surface-100 dark:hover:bg-surface-700 rounded"
+               (click)="logout(); drawerVisible = false">
+              <i class="pi pi-sign-out"></i> Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-template>
+</p-drawer>
+
+  
+
+  <p-button
+    *ngIf="isMobile"
+    icon="pi pi-bars"
+    (click)="drawerVisible = true"
+    class="fixed top-0.5 left-3 z-50 !rounded-full !p-3 shadow-lg"
+  />
 
   <div class="flex-1 p-1 overflow-auto">
     <app-top-menu></app-top-menu>

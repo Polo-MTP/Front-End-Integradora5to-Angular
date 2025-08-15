@@ -168,6 +168,7 @@ export class Sensors implements OnInit {
     if (confirm('¿Está seguro de que desea eliminar este sensor?')) {
       this.sensorsService.deleteSensor(sensorId).subscribe({
         next: (res) => {
+          this.notificationService.success('Sensor eliminado correctamente');
           this.loadSensors(); 
         },
         error: (err) => {

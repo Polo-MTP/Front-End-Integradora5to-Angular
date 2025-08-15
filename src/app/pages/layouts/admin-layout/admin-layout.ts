@@ -64,10 +64,6 @@ export class AdminLayout {
             }
           },
           {
-            label: 'configuracion',
-            icon: 'pi pi-cog',
-          },
-          {
             label: 'Logout',
             icon: 'pi pi-sign-out',
             command: () => {

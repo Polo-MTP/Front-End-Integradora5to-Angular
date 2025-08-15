@@ -99,11 +99,18 @@ export class Account implements OnInit {
 
     this.authService.updateProfileImage(file).subscribe({
       next: (response) => {
-        console.log('Respuesta exitosa:', response); 
         this.uploading = false;
-        this.notificationService.success('Imagen de perfil actualizada correctamente');
+        const currentUser = this.authService.getCurrentUser();
+        if (currentUser && response.user) {
+          const updatedUser = { ...currentUser, profileImage: response.user.profileImage };
+          this.authService.updateUserInfo(updatedUser);
+        }
+
         const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
         if (fileInput) fileInput.value = '';
+        this.notificationService.success('Imagen de perfil actualizada correctamente');
+
+        this.uploading = false;
       },
       error: (error) => {
         console.error('Error en upload:', error); 
